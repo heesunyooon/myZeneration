@@ -19,6 +19,11 @@ import com.project.MyZeneration_spring.service.Standard;
 import com.project.MyZeneration_spring.vo.ItemsVO;
 import com.project.MyZeneration_spring.vo.NestedSelectionVO;
 
+
+/*
+ * 나의 만족도 예측 서비스, MZ세대 만족도 분석서비스 컨트롤러 
+ */
+
 @Controller
 @RequestMapping(value = "/core")
 public class CoreServiceController {
@@ -28,9 +33,6 @@ public class CoreServiceController {
 
 	Standard standard;
 
-	/*
-	 * 나의 만족도 예측 서비스, MZ세대 만족도 분석서비스 컨트롤러 
-	 */
 	
 	//나의 만족도 예측 서비스화면 띄우기  / 테이블 부분 회원정보 불러오기  / 각 select의 option 목록 
 	@GetMapping("/analysisMySat")
