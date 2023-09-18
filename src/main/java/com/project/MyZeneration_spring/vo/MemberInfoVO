@@ -1,0 +1,68 @@
+package com.project.MyZeneration_spring.vo;
+
+import lombok.Data;
+
+/*
+ * 나의 만족도 예측 서비스에서 보여지는 회원 개인 정보 VO
+ */
+
+@Data
+public class MemberInfoVO {
+	private String id;
+	private String name;
+	private String sex;
+	private int age;
+	private String education;
+	private String major;
+	private String region;
+	private int salary;
+	private int familyNo;
+	private String residence;
+	private String workingHour;
+	private String marriage;
+	private int lifeScore;
+	
+	public MemberInfoVO() {
+	}
+	
+	//name 제외
+	public MemberInfoVO(String id, String sex, int age, String education, String major, String region, int salary,
+			int familyNo, String residence, String workingHour, String marriage, int lifeScore) {
+		super();
+		this.id = id;
+		this.sex = sex;
+		this.age = age;
+		this.education = education;
+		this.major = major;
+		this.region = region;
+		this.salary = salary;
+		this.familyNo = familyNo;
+		this.residence = residence;
+		this.workingHour = workingHour;
+		this.marriage = marriage;
+		this.lifeScore = lifeScore;
+	}
+	
+
+	public MemberInfoVO(String id, String name, String sex, int age, String education, String major, String region,
+			int salary, int familyNo, String residence, String workingHour, String marriage, int lifeScore) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.sex = sex;
+		this.age = age;
+		this.education = education;
+		this.major = major;
+		this.region = region;
+		this.salary = salary;
+		this.familyNo = familyNo;
+		this.residence = residence;
+		this.workingHour = workingHour;
+		this.marriage = marriage;
+		this.lifeScore = lifeScore;
+	}
+
+
+	
+	
+}
