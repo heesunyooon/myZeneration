@@ -1,0 +1,24 @@
+package com.project.MyZeneration_spring.vo;
+
+import lombok.Data;
+
+/*
+ * 만족도 설문조사 데이터 VO
+ */
+
+@Data
+public class SurveyVO {
+
+	private String sex;
+	private int age;
+	private String education;
+	private String major;
+	private String region;
+	private int salary;
+	private int familyNo;
+	private String residence;
+	private String workingHour;
+	private String marriage;
+	private int lifeScore;
+
+}
