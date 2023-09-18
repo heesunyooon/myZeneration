@@ -11,7 +11,7 @@ import com.project.MyZeneration_spring.vo.MemberJoinVO;
 import com.project.MyZeneration_spring.vo.SurveyVO;
 
 /*
- *나의 만족도 예측 서비스,  MZ세대 만족도 분석 서비스 레파지토리 
+ * 회원관리 (회원가입, 로그인, 아이디찾기, 비밀번호 찾기), 로그인 레파지토리 
  */
 
 @Repository
