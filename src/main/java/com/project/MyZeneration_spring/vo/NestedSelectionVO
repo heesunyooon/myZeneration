@@ -1,0 +1,16 @@
+package com.project.MyZeneration_spring.vo;
+
+import lombok.Data;
+
+/*
+ * MZ세대 만족도 분석 서비스에서 중복으로 체크된 항목에 대한 배열 VO
+ */
+
+@Data
+public class NestedSelectionVO {
+	
+	private String[] sexList;
+	private String[] ageList;
+	private String[] lifeScoreList;
+
+}
