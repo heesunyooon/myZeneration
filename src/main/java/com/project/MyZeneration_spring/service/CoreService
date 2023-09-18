@@ -1,0 +1,331 @@
+package com.project.MyZeneration_spring.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.project.MyZeneration_spring.repository.CoreServiceRepository;
+import com.project.MyZeneration_spring.vo.ItemScoreVO;
+import com.project.MyZeneration_spring.vo.ItemsVO;
+import com.project.MyZeneration_spring.vo.MemberInfoVO;
+import com.project.MyZeneration_spring.vo.NestedSelectionVO;
+
+/*
+ *나의 만족도 예측 서비스,  MZ세대 만족도 분석 서비스 
+ */
+
+@Service
+public class CoreService {
+
+	@Autowired
+	CoreServiceRepository csRepository;
+	
+	int count =0;
+
+	// [나의 만족도 예측 서비스] 테이블에 데이터 뿌려주는 메소드=====================
+	public MemberInfoVO getMemberInfo(String memberId, HttpSession session) {
+		System.out.println("[CoreService] getMemberInfo / memberId: " + memberId);
+		MemberInfoVO user = csRepository.getMemberInfo(memberId);
+		ItemsVO userItems = new ItemsVO(user.getSex(), String.valueOf(user.getAge()), user.getEducation(),
+				user.getMajor(), user.getRegion(), String.valueOf(user.getSalary()), String.valueOf(user.getFamilyNo()),
+				user.getResidence(), user.getWorkingHour(), user.getMarriage());
+
+		ItemScoreVO itemScore = csRepository.getItemScore(userItems);
+
+		session.setAttribute("education", itemScore.getEducation());
+		session.setAttribute("major", itemScore.getMajor());
+		session.setAttribute("region", itemScore.getRegion());
+		session.setAttribute("salary", itemScore.getSalary());
+		session.setAttribute("familyNo", itemScore.getFamilyNo());
+		session.setAttribute("residence", itemScore.getResidence());
+		session.setAttribute("workingHour", itemScore.getWorkingHour());
+		session.setAttribute("marriage", itemScore.getMarriage());
+		return user;
+	}
+
+	// [나의 만족도 예측 서비스] 레이더차트에 들어가는 점수 얻는 메소드
+	public List<List<String>> calculateRatio(ItemsVO items) {
+		System.out.println("[CoreService - calculateRatio");
+		ItemScoreVO itemScore = csRepository.getItemScore(items);
+
+		int educationRatio = itemScore.getEducation() * 100 / Standard.HIGHEST_EDU;
+		int majorRatio = itemScore.getMajor() * 100 / Standard.HIGHEST_MAJOR;
+		int regionRatio = itemScore.getRegion() * 100 / Standard.HIGHEST_REGION;
+		int salaryRatio = itemScore.getSalary() * 100 / Standard.HIGHEST_SALARY;
+		int familyNoRatio = itemScore.getFamilyNo() * 100 / Standard.HIGHEST_FAMILYNO;
+		int residenceRatio = itemScore.getResidence() * 100 / Standard.HIGHEST_RESIDENCE;
+		int workingHourRatio = itemScore.getWorkingHour() * 100 / Standard.HIGHEST_WORKINGHOUR;
+		int marriageRatio = itemScore.getMarriage() * 100 / Standard.HIGHEST_MARRIAGE;
+		List<String> itemRatios = new ArrayList<String>();
+
+		itemRatios.add(String.valueOf(educationRatio));
+		itemRatios.add(String.valueOf(majorRatio));
+		itemRatios.add(String.valueOf(regionRatio));
+		itemRatios.add(String.valueOf(salaryRatio));
+		itemRatios.add(String.valueOf(familyNoRatio));
+		itemRatios.add(String.valueOf(residenceRatio));
+		itemRatios.add(String.valueOf(workingHourRatio));
+		itemRatios.add(String.valueOf(marriageRatio));
+
+		// 2) 개선해야할 item 배열
+		List<String> badItemList = new ArrayList<String>();
+
+		// 각 item 배열 - itemRatios와 순서 맞춤
+		String[] itemList = { "학력", "전공", "거주지역", "연임금", "가구인원수", "거주형태", "근로시간", "결혼여부" };
+
+		// ratio가 100% 이하인 항목 add
+		for (int i = 0; i < itemRatios.size(); i++) {
+			if (Integer.parseInt(itemRatios.get(i)) < 100) {
+				badItemList.add(itemList[i]);
+			}
+		}
+		// 3) 동일만족도 평균 점수
+		List<String> totalScore = new ArrayList<String>();
+		totalScore.add(String.valueOf(itemScore.getTotal()));
+
+		// 3개의 배열이 담김
+		// itemRatio와 badItemList를 같이 담을 List<String> 배열
+		List<List<String>> ratio_BadItem_score = new ArrayList<List<String>>();
+		ratio_BadItem_score.add(itemRatios);
+		ratio_BadItem_score.add(badItemList);
+		ratio_BadItem_score.add(totalScore);
+		return ratio_BadItem_score;
+	}
+
+	// ==========================================================
+	public int updateMySatScore(ItemsVO changedItems, String id, HttpSession session) {
+		System.out.println("updateMySatScore");
+		ItemScoreVO change = csRepository.getItemScore(changedItems);
+
+		int sessionEducation = (int) session.getAttribute("education");
+		int sessionMajor = (int) session.getAttribute("major");
+		int sessionRegion = (int) session.getAttribute("region");
+		int sessionSalary = (int) session.getAttribute("salary");
+		int sessionFamilyNo = (int) session.getAttribute("familyNo");
+		int sessionResidence = (int) session.getAttribute("residence");
+		int sessionWorkingHour = (int) session.getAttribute("workingHour");
+		int sessionMarriage = (int) session.getAttribute("marriage");
+
+		int gap = 0;
+
+		if (change.getEducation() != sessionEducation) {
+			gap = change.getEducation() - sessionEducation;
+			session.setAttribute("education", change.getEducation());
+		} else if (change.getMajor() != sessionMajor) {
+			gap = change.getMajor() - sessionMajor;
+			session.setAttribute("major", change.getMajor());
+		} else if (change.getRegion() != sessionRegion) {
+			gap = change.getRegion() - sessionRegion;
+			session.setAttribute("region", change.getRegion());
+		} else if (change.getSalary() != sessionSalary) {
+			gap = change.getSalary() - sessionSalary;
+			session.setAttribute("salary", change.getSalary());
+		} else if (change.getFamilyNo() != sessionFamilyNo) {
+			gap = change.getFamilyNo() - sessionFamilyNo;
+			session.setAttribute("familyNo", change.getFamilyNo());
+		} else if (change.getResidence() != sessionResidence) {
+			gap = change.getResidence() - sessionResidence;
+			session.setAttribute("residence", change.getResidence());
+		} else if (change.getWorkingHour() != sessionWorkingHour) {
+			gap = change.getWorkingHour() - sessionWorkingHour;
+			session.setAttribute("workingHour", change.getWorkingHour());
+		} else if (change.getMarriage() != sessionMarriage) {
+			gap = change.getMarriage() - sessionMarriage;
+			session.setAttribute("marriage", change.getMarriage());
+		}
+
+		int newLifeScore = (int) session.getAttribute("lifeScore") + gap+count;
+		if(count>=3) {
+			count=0;
+		}
+		else {
+			count++;
+		}
+		session.setAttribute("lifeScore", newLifeScore);
+		System.out.println(gap);
+		return newLifeScore;
+
+	}
+
+	public List<List<String>> recommend(ItemsVO items, HttpSession session) {
+		System.out.println("recommend");
+		// 아이템 점수 얻음
+		ItemScoreVO itemScore = csRepository.getItemScore(items);
+
+		// 두개의 항목을 담는 배열 (리턴객체)
+		List<List<String>> recommendLists = new ArrayList<List<String>>();
+
+		// 1) 항목변경사항 배열
+		List<String> itemChangeList = new ArrayList<String>();
+		// 2) 항목변경 시 예상만족도 배열
+		List<String> predictLifeScoreList = new ArrayList<String>();
+
+		// 조건별 분기 if절, (각 항목에 대한 값-현재 값)이 0보다 큰 경우 배열에 저장 (가장 낮은 점수를 받는 항목은 아래 if문에서 제외)
+		// 학력
+		int lifeScore = updateMySatScore(items, (String) session.getAttribute("memberId"), session);
+		System.out.println("리코멘드" + lifeScore);
+		int toGraduate = Standard.EDUCATION_GRADUATESCHOOL - itemScore.getEducation();
+		int toUniv = Standard.EDUCATION_UNIVERSITY - itemScore.getEducation();
+		int toScience = Standard.MAJOR_SCIENCE - itemScore.getMajor();
+		int toSociety = Standard.MAJOR_SOCIETY - itemScore.getMajor();
+		int toSeoul = Standard.REGION_SEOUL - itemScore.getRegion();
+		int toBusan = Standard.REGION_BUSAN - itemScore.getRegion();
+		int toSal6000 = Standard.SALARY_6000 - itemScore.getSalary();
+		int toSal5000 = Standard.SALARY_5000 - itemScore.getSalary();
+		int toSal4000 = Standard.SALARY_4000 - itemScore.getSalary();
+		int toSal3000 = Standard.SALARY_3000 - itemScore.getSalary();
+		int toSal2000 = Standard.SALARY_2000 - itemScore.getSalary();
+		int toFamNo5 = Standard.FAMILYNO_5 - itemScore.getFamilyNo();
+		int toFamNo4 = Standard.FAMILYNO_4 - itemScore.getFamilyNo();
+		int toFamNo3 = Standard.FAMILYNO_3 - itemScore.getFamilyNo();
+		int toFamNo2 = Standard.FAMILYNO_2 - itemScore.getFamilyNo();
+		int toBuyHome = Standard.RESIDENCE_BUYINGHOUSE - itemScore.getResidence();
+		int toWithParents = Standard.RESIDENCE_LIVINGWITHPARENTES - itemScore.getResidence();
+		int toPayAnnual = Standard.RESIDENCE_PAYINGANNUAL - itemScore.getResidence();
+		int toUnder40 = Standard.WORKINGHOUR_UNDER40 - itemScore.getWorkingHour();
+		int to40Btw49 = Standard.WORKINGHOUR_BETWEEN40AND49 - itemScore.getWorkingHour();
+		int to50Btw59 = Standard.WORKINGHOUR_BETWEEN50AND59 - itemScore.getWorkingHour();
+		int toMarried = Standard.MARRIAGE_MARRIED - itemScore.getMarriage();
+
+		if (toGraduate > 0) {
+			itemChangeList.add("학력을 대학원졸업으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toGraduate));
+		}
+		if (toUniv > 0) {
+			itemChangeList.add("학력을 대학교졸업으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toUniv));
+		}
+
+		// 전공별
+		if (toScience > 0) {
+			itemChangeList.add("전공을 이학/공학으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toScience));
+
+		}
+		if (toSociety > 0) {
+			itemChangeList.add("전공을 인문/사회으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toSociety));
+		}
+
+		// 지역별
+		if (toSeoul > 0) {
+			itemChangeList.add("거주지역을 서울특별시로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toSeoul));
+		}
+		if (toBusan > 0) {
+			itemChangeList.add("거주지역을 부산광역시로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toBusan));
+		}
+
+		// 연임금별
+		if (toSal6000 > 0) {
+			itemChangeList.add("연임금을 6000만원으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toSal6000));
+		}
+		if (toSal5000 > 0) {
+			itemChangeList.add("연임금을 5000만원으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toSal5000));
+		}
+		if (toSal4000 > 0) {
+			itemChangeList.add("연임금을 4000만원으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toSal4000));
+		}
+		if (toSal3000 > 0) {
+			itemChangeList.add("연임금을 3000만원으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toSal3000));
+		}
+		if (toSal2000 > 0) {
+			itemChangeList.add("연임금을 2000만원으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toSal3000));
+		}
+
+		// 가구인원수별
+		if (toFamNo5 > 0) {
+			itemChangeList.add("가구인원수를 5인으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toFamNo5));
+		}
+		if (toFamNo4 > 0) {
+			itemChangeList.add("가구인원수를 4인으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toFamNo4));
+		}
+		if (toFamNo3 > 0) {
+			itemChangeList.add("가구인원수를 3인으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toFamNo3));
+		}
+		if (toFamNo2 > 0) {
+			itemChangeList.add("가구인원수를 2인으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toFamNo2));
+		}
+
+		// 거주형태별
+		if (toBuyHome > 0) {
+			itemChangeList.add("거주형태를 자가로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toBuyHome));
+		}
+		if (toWithParents > 0) {
+			itemChangeList.add("거주형태를 부모님과동거로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toWithParents));
+		}
+		if (toPayAnnual > 0) {
+			itemChangeList.add("거주형태를 전세로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toPayAnnual));
+		}
+
+		// 근로시간별
+		if (toUnder40 > 0) {
+			itemChangeList.add("근로시간을 40시간미만으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toUnder40));
+		}
+		if (to40Btw49 > 0) {
+			itemChangeList.add("근로시간을 40~49시간으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + to40Btw49));
+		}
+		if (to50Btw59 > 0) {
+			itemChangeList.add("근로시간을 50~59시간으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + to50Btw59));
+		}
+
+		// 결혼여부
+		if (toMarried > 0) {
+			itemChangeList.add("결혼여부를 기혼으로 변경");
+			predictLifeScoreList.add(String.valueOf(lifeScore + toMarried));
+		}
+
+		recommendLists.add(itemChangeList);
+		recommendLists.add(predictLifeScoreList);
+
+		csRepository.insertRecommend(recommendLists);
+		List<List<String>> oRecommendLists = csRepository.orderItemChangeList(lifeScore);
+
+		return oRecommendLists;
+
+	}
+
+	//중복 선택한 각 항목에 대한 비율 데이터 내보내기 
+	public List<List<String>> getMzRatio(NestedSelectionVO lists) {
+
+		String[] sexList = lists.getSexList();
+		String[] ageList = lists.getAgeList();
+		String[] lifeScoreList = lists.getLifeScoreList();
+
+		List<String> educationList = csRepository.getRatioArray(sexList, ageList, lifeScoreList, "education");
+		List<String> majorList = csRepository.getRatioArray(sexList, ageList, lifeScoreList, "major");
+		List<String> salaryList = csRepository.getRatioArray(sexList, ageList, lifeScoreList, "salary");
+		List<String> familyNoList = csRepository.getRatioArray(sexList, ageList, lifeScoreList, "familyNo");
+		List<String> regionList = csRepository.getRatioArray(sexList, ageList, lifeScoreList, "region");
+
+		List<List<String>> itemLists = new ArrayList<List<String>>();
+		itemLists.add(educationList);
+		itemLists.add(majorList);
+		itemLists.add(salaryList);
+		itemLists.add(familyNoList);
+		itemLists.add(regionList);
+
+		return itemLists;
+	}
+
+}
