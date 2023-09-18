@@ -1,0 +1,54 @@
+package com.project.MyZeneration_spring.vo;
+
+import lombok.Data;
+
+/*
+ * 각 항목에 대한 VO
+ */
+
+@Data
+public class ItemsVO {
+
+	private String sex;
+	private String age;
+	private String education;
+	private String major;
+	private String region;
+	private String salary;
+	private String familyNo;
+	private String residence;
+	private String workingHour;
+	private String marriage;
+
+
+	public ItemsVO() {
+	}
+	
+	public ItemsVO(String sex, String age, String education, String major, String region, String salary,
+			String familyNo, String residence, String workingHour, String marriage) {
+		this.sex = sex;
+		this.age = age;
+		this.education = education;
+		this.major = major;
+		this.region = region;
+		this.salary = salary;
+		this.familyNo = familyNo;
+		this.residence = residence;
+		this.workingHour = workingHour;
+		this.marriage = marriage;
+	}
+	
+	//sex와 age를 제외함
+	public ItemsVO(String education, String major, String region, String salary, String familyNo, String residence,
+			String workingHour, String marriage) {
+		this.education = education;
+		this.major = major;
+		this.region = region;
+		this.salary = salary;
+		this.familyNo = familyNo;
+		this.residence = residence;
+		this.workingHour = workingHour;
+		this.marriage = marriage;
+	}
+
+}
