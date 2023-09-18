@@ -92,7 +92,7 @@
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version> <!-- 라이브러리 버전은 최신 버전에 맞게 업데이트할 수 있습니다. -->
+			<version>1.1.1</version> 
 		</dependency>
 
 
