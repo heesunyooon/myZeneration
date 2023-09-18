@@ -1,0 +1,328 @@
+@charset "utf-8";
+@import "./font/font.css";
+
+
+/*-----------------나타내기 효과-------------------------*/
+/*Animation Position */
+.ani.top{transform:translateY(-50px); -webkit-transform:translateY(-50px); }
+.ani.bottom{transform:translateY(50px); -webkit-transform:translateY(50px);}
+.ani.left{transform:translateX(-50px); -webkit-transform:translateX(-50px);}
+.ani.right{transform:translateX(50px); -webkit-transform:translateX(50px);}
+.ani.active {
+  opacity:1;
+  transform:translate(0px,0px) ;
+  -webkit-transform:translate(0px,0px) ;
+}
+.delay0{transition-delay: 0s !important;}
+.delay1{transition-delay: .1s !important;}
+.delay2{transition-delay: .2s !important;}
+.delay3{transition-delay: .3s !important;}
+.delay4{transition-delay: .4s !important;}
+/* animation */
+@keyframes intro-arrow {
+    0% { transform: translateX(-30px) translateY(-30px) rotate(180deg); opacity: 0; }
+    100% { transform: translateX(0) translateY(0) rotate(180deg); opacity: 1; }
+}
+@keyframes intro-text {
+    0% { transform: translateY(-17px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+/*-----------------나타내기 효과-------------------------*/
+
+*{font-family: 'Pretendard-Regular' !important;}
+
+
+.body-login{ /*필요함*/
+	background: linear-gradient(-45deg, #863ce7,#2361d5, #23d5bd);
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    position:relative;
+}
+
+#header-login{
+    position: relative;
+    top: 15vh;
+    background-color: white;
+    width: 45vh;
+    height: 65vh;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 10px;
+    padding: 2vw;
+}
+
+.container-login{
+    position:relative;
+    width:90%;
+    margin:0 auto;
+}
+
+.login-topic{
+    font-family:'BookkMyungjo-Bd' !important; 
+    font-size: 30px;
+    color:rgb(90, 90, 90);
+    margin: 3vh 0;
+    margin-bottom: 1vh;
+}
+.input-id, .input-pw{
+    border:none;
+    border-bottom:1px solid rgb(223, 223, 223);
+    margin: 2vh 0;
+    width:90%;
+    padding:1vh;
+}
+
+::placeholder{
+    color:rgb(148, 148, 148)
+}
+
+.id-pw a{
+    text-decoration: none;
+}
+
+.id-pw{
+    margin-top:1vh;
+}
+
+.login-btn{
+    margin: 3vh 0;
+    background-color: #863ce7;
+    color:white;
+    border:none;
+    width:100%;
+    height:40px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.login-btn:hover{
+    background-color: #3c82e7;
+}
+
+.join-text, .id-pw{
+    color:gray;
+    font-size:15px;
+}
+
+header.major p {display: inline-block;border-top: solid 2px #e5e5e5;color: #777;margin: 1.5em 0 0 0;padding: 1.5em 0 0 0;font-style: normal;}
+
+
+
+
+/*반응형 토글 메뉴*/
+#header-mobile {
+	display: none;
+}
+
+.toggleList {
+	position: absolute;
+	width: 200px;
+	right: -200px;
+	text-align: left;
+	transition: 1s;
+	top: 1vh;
+	background-color: #ffffff;
+	border-top-left-radius: 20px;
+	border-bottom-left-radius: 20px;
+}
+.toggleList ul{
+list-style:none;
+}
+.showing{
+right:0px !important;
+}
+
+.toggleList > ul > li {
+	border-bottom:1px dotted rgb(202, 202, 202);
+	width:200px;
+	height: 55px;
+	line-height: 55px;
+	font-size: 17px;
+	text-decoration: none;
+	padding-left:15px;
+}
+.toggleList >ul >li > a{
+	display: block;
+	color:rgb(110, 110, 110);
+	text-decoration: none;
+	transition: 0s;
+}
+.toggleList > ul > li:hover{
+	background-color: rgb(126, 80, 250);
+	transition: 0s;
+}
+.toggleList > ul > li >a:hover{
+	background-color: rgb(126, 80, 250);
+	color:white;
+	transition: 0s;
+}
+
+.btn{
+	position: absolute ;
+	right: 100% ;
+	top: 0;
+	width: 65px ;
+	height: 50px ;
+	text-align:center;
+	line-height: 50px ;
+	z-index:999;
+}
+
+@media screen and (max-width: 1280px) {
+	#header-mobile {display: block;}
+	#header{display:none;}
+}
+	
+	
+	html, body, div, span, applet, object,
+iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
+pre, a, abbr, acronym, address, big, cite,
+code, del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, b,
+u, i, center, dl, dt, dd, ol, ul, li, fieldset,
+form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td, article, aside,
+canvas, details, embed, figure, figcaption,
+footer, header, hgroup, menu, nav, output, ruby,
+section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+a{
+text-decoration:none;
+}
+
+
+a:hover {border-bottom-color: transparent;}
+strong, b {color: #646464;font-weight: 400;}
+em, i {	font-style: italic;}
+p {margin: 0 0 2em 0;}
+h1, h2, h3, h4, h5, h6 {color: #646464;font-weight: 300;line-height: 1em;margin: 0 0 0.5em 0;}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {color: inherit;	text-decoration: none;}
+h2 {font-size: 2.25em;line-height: 1.5em;letter-spacing: -0.035em;}
+h3 {font-size: 1.75em;line-height: 1.5em;letter-spacing: -0.025em;}
+h4 {font-size: 1.1em;line-height: 1.5em;letter-spacing: 0;}
+h5 {font-size: 0.9em;line-height: 1.5em;letter-spacing: 0;}
+h6 {font-size: 0.7em;line-height: 1.5em;letter-spacing: 0;}
+sub {font-size: 0.8em;position: relative;top: 0.5em;}
+sup {font-size: 0.8em;position: relative;top: -0.5em;}
+hr {border: 0;border-bottom: solid 2px #e5e5e5;margin: 2em 0;}
+hr.major {margin: 3em 0;}
+blockquote {border-left: solid 4px #e5e5e5;font-style: italic;margin: 0 0 2em 0;padding: 0.5em 0 0.5em 2em;}
+pre {
+	-webkit-overflow-scrolling: touch;
+	background: #f8f8f8;
+	border-radius: 6px;
+	border: solid 1px #e5e5e5;
+	font-size: 0.9em;
+	line-height: 1.75em;
+	margin: 0 0 2em 0;
+	overflow-x: auto;
+	padding: 1em 1.5em;
+}
+
+	#header h1 {
+		height: 40px;
+		left: 1.25em;
+		line-height: 45px;
+		margin: 0;
+		padding: 0;
+		position: absolute;
+		top: 0;
+		font-size: 16px;
+		color:white;
+		width:500px;
+	}
+	#header h1 a {color: #fff;font-weight: 400;border: 0; text-decoration: none;}
+	#header nav {
+		display:visible; 
+		height: inherit;
+		line-height: inherit;
+		position: absolute;
+		right: 2.0em;
+		top: 0;
+		vertical-align:middle;
+		font-size:17px;
+	}
+	
+	/*내비바 중앙*/
+#header nav > ul {
+	list-style: none;
+	margin: 0;
+	padding-left: 0;
+	height: 45px;
+	line-height: 45px;
+	color: white;
+}
+
+#header nav > ul > li {
+	display: inline-block;
+	padding-left: 0;
+}
+#header nav > ul > li a:hover{
+	color:rgb(62, 226, 255);
+}
+#header.alt {
+	background-color: transparent;
+	color: rgba(255, 255, 255);
+	position: fixed;
+	height: 45px;
+	transition:0.5s;
+}
+#header nav > ul > li a {
+	line-height: 1.95em;
+	padding: 0 1em;
+	height: 2em;
+	color: #ffffff;
+	display: inline-block;
+	text-decoration: none;
+	border: 0;
+}
+.colorChange{
+	background:linear-gradient(45deg, rgb(49,167,206), rgb(85,111,201), rgb(95,97,201),rgb(125,50,197),rgb(125,50,197));
+	transition:0.5s;
+}
+
+/*Animation Position */
+.ani {transition:all 0.7s ease-in-out; -webkit-transition:all 0.4s ease -in-out; opacity: 0;}
+.ani.top{transform:translateY(-50px); -webkit-transform:translateY(-50px); }
+.ani.bottom{transform:translateY(50px); -webkit-transform:translateY(50px);}
+.ani.left{transform:translateX(-50px); -webkit-transform:translateX(-50px);}
+.ani.right{transform:translateX(50px); -webkit-transform:translateX(50px);}
+.ani.active {
+  opacity:1;
+  transform:translate(0px,0px) ;
+  -webkit-transform:translate(0px,0px) ;
+}
+
+.delay0{
+    transition-delay: 0s !important;
+}
+.delay1{
+    transition-delay: .1s !important;
+}
+.delay2{
+    transition-delay: .2s !important;
+}
+.delay3{
+    transition-delay: .3s !important;
+}
+.delay4{
+    transition-delay: .4s !important;
+}
+/* animation */
+@keyframes intro-arrow {
+    0% { transform: translateX(-30px) translateY(-30px) rotate(180deg); opacity: 0; }
+    100% { transform: translateX(0) translateY(0) rotate(180deg); opacity: 1; }
+}
+@keyframes intro-text {
+    0% { transform: translateY(-17px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
