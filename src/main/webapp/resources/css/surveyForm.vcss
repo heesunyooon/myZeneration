@@ -1,0 +1,92 @@
+@charset "utf-8";
+@import "./font/font.css";
+
+
+
+*{
+    color:rgb(88, 88, 88);
+	font-family: 'Pretendard-Regular' !important;
+}
+
+body{
+    width:100vw;
+    height:100vh;
+    position: absolute;
+    background-color: rgb(218, 235, 247) ;
+    overflow-x: hidden;
+}
+
+.logo{
+    width:100%;   
+    text-align: center; 
+    border:1px solid rgb(221, 221, 221)
+}
+img{
+    width:35%;
+    padding:3% 0;
+}
+.contents{
+    width:60%;
+    height:auto;
+    padding:1%;
+    /* background-color: white; */
+    position:relative;
+    left:50%;
+    transform: translateX(-50%);
+    top:5%;
+   
+}
+.topic{
+    color:rgb(88, 88, 88);
+    font-size: 2.0vw;
+    margin:0;
+}
+.writeText{
+    width:50%;
+    font-size: 1.0vw;
+}
+.form{
+    padding:3%;
+}
+.notice{
+    border:none !important;
+    border-top:0.8vw solid rgb(9, 110, 177) !important;
+    border-radius:0 !important;
+}
+
+input{
+    border: none;
+    border-bottom: 1px solid rgb(214, 214, 214);
+    font-size: 0.6vw;
+    margin: 0.6vw;
+    
+}
+
+.form div{
+    height: auto;
+    border:1px solid rgb(218, 218, 218);
+    margin:5% auto;
+    padding:3% 0% 5% 3%;
+    font-size: 1.0vw;
+    background-color: white;
+    border-left: 10px solid rgb(72, 136, 219);
+    border-radius: 10px 10px 10px 10px;
+}
+
+.form div p{
+    margin-bottom:1vh;
+}
+
+select{
+    width:40%;
+    font-size: 1.0vw;
+}
+.submitBtn{
+    background-color: rgb(10, 61, 109);
+    color:white;
+    width:6vw;
+    height:3vw;
+    font-size: 1.0vw;
+    text-align: center;
+    border-radius: 5px 5px 5px 5px;
+}
