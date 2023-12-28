@@ -3,8 +3,7 @@
 <html>
   <head>
     <body>
-      <h1>MyZeneration</h1>
-      <hr>
+    
       [Description]
 
       *mini_01,02: Array
